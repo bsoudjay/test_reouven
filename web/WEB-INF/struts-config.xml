@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://jakarta.apache.org/struts/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+   
+  <!-- Form Beans Configuration -->
+  <form-beans>
+      <form-bean name="employeeSearchForm" type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property name="ssNum" type="java.lang.String"/>
+            <form-property name="firstName" type="java.lang.String"/>
+            <form-property name="telephone" type="java.lang.String"/>
+            <form-property name="results" type="java.util.List"/>
+      </form-bean>
+      
+      <form-bean name="employeesShowForm"   type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property name="results" type="java.util.List"/>
+      </form-bean>
+      
+      <form-bean name="employeeAddForm" type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property name="ssNum" type="java.lang.String"/>
+            <form-property name="firstName" type="java.lang.String"/>
+            <form-property name="telephone" type="java.lang.String"/>
+            <form-property name="lastName" type="java.lang.String"/>
+            <form-property name="gender" type="java.lang.String"/>
+            <form-property name="mail" type="java.lang.String"/>
+            <form-property name="dept_id" type="java.lang.Short"/>
+            <form-property name="hiredate" type="java.lang.String"/>
+            <form-property name="salary" type="java.lang.String" />
+	    <form-property name="res" type="java.lang.Boolean"/>
+        </form-bean>
+        
+        <form-bean name="employeeUpdateForm" type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property name="ssNum" type="java.lang.String"/>
+            <form-property name="firstName" type="java.lang.String"/>
+            <form-property name="lastName" type="java.lang.String"/>
+            <form-property name="telephone" type="java.lang.String"/>
+            <form-property name="gender" type="java.lang.String"/>
+            <form-property name="mail" type="java.lang.String"/>
+            <form-property name="dept_id" type="java.lang.String"/>
+            <form-property name="hiredate" type="java.lang.String"/>
+            <form-property name="salary" type="java.lang.String"/>
+            <form-property name="results" type="java.util.List"/>
+        </form-bean>
+        
+        <form-bean name="employeeDeleteForm" type="org.apache.struts.validator.DynaValidatorForm">
+            <form-property name="ssNum" type="java.lang.String"/>
+            <form-property name="res" type="java.lang.Boolean"/>
+        </form-bean>
+
+  </form-beans>
+   
+  <!-- Global Forwards Configuration -->
+  <global-exceptions>
+    
+  </global-exceptions>
+  
+  <global-forwards>
+        <forward name="search" path="searchEmployee.jsp"/>
+        <forward name="show" path="showEmployees.jsp"/>
+        <forward name="add" path="addEmployee.jsp"/>
+        <forward name="delete" path="deleteEmployee.jsp"/>
+        <forward name="update" path="updateEmployee.jsp"/>
+  </global-forwards>
+
+   
+  <!-- Action Mappings Configuration -->
+ <action-mappings>
+
+    <action path="/index" forward="/menu.jsp"/>
+    <action path="/searchEmployee"
+            type="com.hr.struts.controller.EmployeeAction"
+            name="employeeSearchForm"
+            parameter="search"
+            scope="request"
+            validate="true"
+            input="/searchEmployee.jsp">
+    </action>
+    <action path="/showEmployees"
+            type="com.hr.struts.controller.EmployeeAction"
+            name="employeesShowForm"
+            parameter="show"
+            scope="request"
+            validate="true"
+            input="/showEmployees.jsp">
+            <forward name="succes" path="/showEmployees.jsp"/>
+            <forward name="echec" path="/menu.jsp"/>
+    </action>
+    <action path="/addEmployee"
+            type="com.hr.struts.controller.EmployeeAction"
+            name="employeeAddForm"
+            parameter="add"
+            scope="request"
+            validate="true"
+            input="/addEmployee.jsp">
+            <forward name="succes" path="/showEmployees.jsp"/>
+            <forward name="echec" path="/addEmployee.jsp"/>
+    </action>
+    <action path="/updateEmployee"
+            type="com.hr.struts.controller.EmployeeAction"
+            name="employeeUpdateForm"
+            parameter="update"
+            scope="request"
+            validate="true"
+            input="/updateEmployee.jsp">
+            <forward name="succes" path="/showEmployees.jsp"/>
+            <forward name="echec" path="/updateEmployee.jsp"/>
+    </action>
+    <action path="/deleteEmployee"
+            type="com.hr.struts.controller.EmployeeAction"
+            name="employeeDeleteForm"
+            parameter="delete"
+            scope="request"
+            validate="true"
+            input="/deleteEmployee.jsp">
+            <forward name="succes" path="/showEmployees.jsp"/>
+            <forward name="echec" path="/deleteEmployee.jsp"/>
+    </action>
+
+
+  </action-mappings>
+   
+<controller processorClass="org.apache.struts.tiles.TilesRequestProcessor"/>
+
+<!-- Message Resources Configuration -->
+<message-resources parameter="com/myapp/struts/ApplicationResource"/>   
+    
+    <!-- ========================= Tiles plugin ===============================-->
+    <!--
+    This plugin initialize Tiles definition factory. This later can takes some
+    parameters explained here after. The plugin first read parameters from
+    web.xml, thenoverload them with parameters defined here. All parameters
+    are optional.
+    The plugin should be declared in each struts-config file.
+    - definitions-config: (optional)
+    Specify configuration file names. There can be several comma
+    separated file names (default: ?? )
+    - moduleAware: (optional - struts1.1)
+    Specify if the Tiles definition factory is module aware. If true
+    (default), there will be one factory for each Struts module.
+    If false, there will be one common factory for all module. In this
+    later case, it is still needed to declare one plugin per module.
+    The factory will be initialized with parameters found in the first
+    initialized plugin (generally the one associated with the default module).
+    true : One factory per module. (default)
+    false : one single shared factory for all modules
+    - definitions-parser-validate: (optional)
+    Specify if xml parser should validate the Tiles configuration file.
+    true : validate. DTD should be specified in file header (default)
+    false : no validation
+
+    Paths found in Tiles definitions are relative to the main context.
+    -->
+    <plug-in className="org.apache.struts.tiles.TilesPlugin" >
+        <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />      
+        <set-property property="moduleAware" value="true" />
+    </plug-in>
+    
+    <!-- ========================= Validator plugin =============================== -->
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+        <set-property
+            property="pathnames"
+            value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+    </plug-in>
+    
+    <plug-in className="com.hr.plugin.ModelCachePlugIn">
+        <set-property
+            property="modelEmployee"
+            value="com.hr.struts.model.EmployeeManagement" />
+        <set-property
+            property="modelDepartment"
+            value="com.hr.struts.model.DepartmentService" />
+    </plug-in>
+
+  
+</struts-config>
